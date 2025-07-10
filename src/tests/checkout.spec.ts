@@ -28,5 +28,3 @@ test("Verify total is correctly calculated", async ({ page }) => {
   // Verify the total calculation
   await checkoutPage.verifyCalculatedTotalMatchesDisplayedTotal();
 });
-
-

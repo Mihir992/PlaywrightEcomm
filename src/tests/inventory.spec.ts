@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { performLogin } from "../utils/loginUtils";
 import { InventoryPage } from "../pages/InventoryPage";
+import { CartPage } from "../pages/CartPage";
 
 test("Fetch and interact with products on inventory page", async ({ page }) => {
   // Step 1: Login using reusable login function
@@ -19,10 +20,11 @@ test("Fetch and interact with products on inventory page", async ({ page }) => {
   await inventoryPage.clickProductByName(productNameToClick);
   // Log the product name before clicking
   console.log(`Clicking on product: ${productNameToClick}`);
-  await page.pause();
+
+  //await page.pause();
   // Step 5:Now click the cart
   await inventoryPage.clickOnAddToCartButton();
 
-  //Step 6:Click on cart button
-  await inventoryPage.clickCartButton();
+  //Step 6:Click on cart button and chain to CheckoutPage
+   const cartPage: CartPage = await inventoryPage.clickCartButton();
 });

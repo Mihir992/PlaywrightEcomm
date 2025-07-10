@@ -2,11 +2,12 @@ import { test, expect } from "@playwright/test";
 import { performLogin } from "../utils/loginUtils";
 import { InventoryPage } from "../pages/InventoryPage";
 import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 
 test.beforeEach(async ({ page }) => {
   // Login
   await performLogin(page);
-  await page.pause();
+  //await page.pause();
   // Add to cart
   const inventoryPage = new InventoryPage(page);
   await inventoryPage.clickProductByName("Sauce Labs Backpack");
@@ -17,10 +18,12 @@ test.beforeEach(async ({ page }) => {
 test("Verify cart item test", async ({ page }) => {
   const cartPage = new CartPage(page);
 
-  //Fetch cart details **before** navigating
+  
+  // Step 1: Fetch and validate cart item details
   const actualDetails = await cartPage.fetchCartDetails();
-  //await page.pause();
-  // Then navigate away
-  await cartPage.clickOnCheckoutButton();
-});
+  expect(actualDetails.name).toBe("Sauce Labs Backpack");
 
+  //await page.pause();
+   // Step 2: Chain to CheckoutPage
+  const checkoutPage: CheckoutPage = await cartPage.clickOnCheckoutButton();
+});

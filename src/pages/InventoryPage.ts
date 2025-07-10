@@ -44,7 +44,7 @@ export class InventoryPage {
             return;
         }
      }
-      throw new Error("Product with name `${productName}` not found");
+      throw new Error(`Product with name "${productName}" not found`);
   }
 
   async clickOnAddToCartButton() {

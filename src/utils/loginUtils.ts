@@ -23,5 +23,5 @@ export async function performLogin(page: Page, context: BrowserContext) {
   await page.waitForSelector('.inventory_list');
 
   // Save storage state
-  await context.storageState({ path: 'tests/storage/storageState.json' });
+  await page.context().storageState({ path: 'tests/storage/storageState.json' });
 }

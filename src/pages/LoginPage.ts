@@ -11,25 +11,24 @@ export class LoginPage{
          this.page = page;
     }
 
-     async goto(baseURL: string) {
-      await this.page.goto(`${baseURL}/login`);
+    async goto(baseURL: string) {
+      await this.page.goto(baseURL); // Remove the /login
     }
 
+    async fillUsername(uname: string) {
+      await this.page.locator(this.usernameInputSelector).fill(uname);
+    }
 
-  async fillUsername(uname: string) {
-    await this.page.locator(this.usernameInputSelector).fill(uname);
+    async fillPassword(pwd: string) {
+      await this.page.locator(this.passwordInputSelector).fill(pwd);
+    }
+
+  async clickLoginButton(): Promise<InventoryPage> {
+    await Promise.all([
+      //this.page.waitForNavigation({ waitUntil: 'load' }),
+      this.page.locator(this.loginButton).click()
+    ]);
+    return new InventoryPage(this.page);
   }
-
-  async fillPassword(pwd: string) {
-    await this.page.locator(this.passwordInputSelector).fill(pwd);
-  }
-
- async clickLoginButton(): Promise<InventoryPage> {
-  await Promise.all([
-    //this.page.waitForNavigation({ waitUntil: 'load' }),
-    this.page.locator(this.loginButton).click()
-  ]);
-  return new InventoryPage(this.page);
-}
 }
 

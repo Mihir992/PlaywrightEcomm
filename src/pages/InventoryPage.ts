@@ -24,7 +24,6 @@ export class InventoryPage {
       const name = await item.locator('[data-test="inventory-item-name"]').innerText();
       const description = await item.locator('[data-test="inventory-item-desc"]').innerText();
       const price = await item.locator('[data-test="inventory-item-price"]').innerText();
-
       products.push({ name, description, price });
     }
 

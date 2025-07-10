@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import { InventoryPage } from "./InventoryPage";
 
 export class LoginPage{
     readonly page: Page;
@@ -11,10 +12,10 @@ export class LoginPage{
     }
 
     async navigateToLoginPage() {
-    const baseUrl = process.env.BASE_URL;
-    if (!baseUrl) throw new Error("BASE_URL not set in .env");
-    await this.page.goto(baseUrl);
-  }
+      const baseUrl = process.env.BASE_URL;
+      if (!baseUrl) throw new Error("BASE_URL not set in .env");
+      await this.page.goto(baseUrl);
+    }
 
   async fillUsername(uname: string) {
     await this.page.locator(this.usernameInputSelector).fill(uname);
@@ -24,10 +25,12 @@ export class LoginPage{
     await this.page.locator(this.passwordInputSelector).fill(pwd);
   }
 
-  async clickLoginButton() {
-    await this.page.locator(this.loginButton).click();
-    //const inventoryPage = new InventoryPage(this.page);
-
+  async clickLoginButton():Promise<InventoryPage> {
+    await Promise.all([
+      this.page.locator(this.loginButton).click(),
+      //const inventoryPage = new InventoryPage(this.page);
+    ]);
+    return new InventoryPage(this.page); // returns the next page object
   }
 }
 

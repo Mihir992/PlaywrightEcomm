@@ -1,4 +1,5 @@
 import { Page, expect } from "@playwright/test";
+import { CartPage } from "./CartPage";
 
 export class InventoryPage {
   readonly page: Page;
@@ -17,17 +18,14 @@ export class InventoryPage {
     const products: { name: string; description: string; price: string }[] = [];
     const productElements = this.page.locator(this.productItemContainer);
     const count = await productElements.count(); //missing await
-
     for (let i = 0; i < count; i++) {
       const item = productElements.nth(i); //access one product at a time
-
       const name = await item.locator('[data-test="inventory-item-name"]').innerText();
       const description = await item.locator('[data-test="inventory-item-desc"]').innerText();
       const price = await item.locator('[data-test="inventory-item-price"]').innerText();
       products.push({ name, description, price });
-    }
-
-    console.log("All Products:", products); //Print in console
+      }
+      console.log("All Products:", products); //Print in console
     return products;
   }
 
@@ -54,8 +52,11 @@ export class InventoryPage {
     await this.page.locator(this.removeBtn).isVisible();
   }
   
-  async clickCartButton() {
-    await this.page.locator(this.cartBtn).click();
-    await this.page.waitForURL('https://www.saucedemo.com/cart.html');
+  async clickCartButton():Promise<CartPage>{
+    await Promise.all([
+      this.page.locator(this.cartBtn).click(),
+      this.page.waitForURL('https://www.saucedemo.com/cart.html'),
+    ]);
+     return new CartPage(this.page); // returns the next page object 
   }
 }

@@ -5,10 +5,7 @@ import { CartPage } from "../pages/CartPage";
 import { CheckoutPage } from "../pages/CheckoutPage";
 
 test.beforeEach(async ({ page }) => {
-  // Login
-  await performLogin(page);
-  //await page.pause();
-  // Add to cart
+  // Setup: add product to cart & navigate to cart page
   const inventoryPage = new InventoryPage(page);
   await inventoryPage.clickProductByName("Sauce Labs Backpack");
   await inventoryPage.clickOnAddToCartButton();

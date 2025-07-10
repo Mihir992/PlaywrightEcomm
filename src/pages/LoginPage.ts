@@ -11,11 +11,10 @@ export class LoginPage{
          this.page = page;
     }
 
-    async navigateToLoginPage() {
-      const baseUrl = process.env.BASE_URL;
-      if (!baseUrl) throw new Error("BASE_URL not set in .env");
-      await this.page.goto(baseUrl);
+     async goto(baseURL: string) {
+      await this.page.goto(`${baseURL}/login`);
     }
+
 
   async fillUsername(uname: string) {
     await this.page.locator(this.usernameInputSelector).fill(uname);
@@ -25,12 +24,12 @@ export class LoginPage{
     await this.page.locator(this.passwordInputSelector).fill(pwd);
   }
 
-  async clickLoginButton():Promise<InventoryPage> {
-    await Promise.all([
-      this.page.locator(this.loginButton).click(),
-      //const inventoryPage = new InventoryPage(this.page);
-    ]);
-    return new InventoryPage(this.page); // returns the next page object
-  }
+ async clickLoginButton(): Promise<InventoryPage> {
+  await Promise.all([
+    //this.page.waitForNavigation({ waitUntil: 'load' }),
+    this.page.locator(this.loginButton).click()
+  ]);
+  return new InventoryPage(this.page);
+}
 }
 

@@ -1,11 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { performLogin } from "../utils/loginUtils";
 import { InventoryPage } from "../pages/InventoryPage";
 import { CartPage } from "../pages/CartPage";
 
 test("Fetch and interact with products on inventory page", async ({ page }) => {
   // Step 1: Login using reusable login function
-  await performLogin(page);
+  //await performLogin(page);
 
   // Step 2: Instantiate InventoryPage
   const inventoryPage = new InventoryPage(page);

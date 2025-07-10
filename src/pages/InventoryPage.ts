@@ -49,7 +49,7 @@ export class InventoryPage {
 
   async clickOnAddToCartButton() {
     await this.page.locator(this.addToCartBtn).click();
-    await this.page.locator(this.removeBtn).isVisible();
+    await this.page.locator(this.removeBtn).waitFor({ state: 'visible' });
   }
   
   async clickCartButton():Promise<CartPage>{

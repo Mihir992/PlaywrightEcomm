@@ -1,16 +1,16 @@
-// File: tests/setup/globalSetup.ts
-import { chromium } from "@playwright/test";
-import { performLogin } from "utils/loginUtils";// ✅ CORRECT path
-import * as dotenv from 'dotenv';
+// global-setup.ts
+import { chromium } from '@playwright/test';
+import { performLogin } from './src/utils/loginUtils';
 
-dotenv.config();
-
-export default async function globalSetup() {
+async function globalSetup() {
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  await performLogin(page, context);
+  await performLogin(page); // ✅ custom login
+  await context.storageState({ path: 'storageState.json' });
 
-  //await browser.close(); // ✅ Don't forget to close browser
+  //await browser.close();
 }
+
+export default globalSetup;

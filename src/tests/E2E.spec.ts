@@ -9,14 +9,14 @@ import checkoutData from "../data/checkoutdetails.json";
 dotenv.config();
 
 test('E2E Test: Login → Add to Cart → Checkout → Verify Total', async ({ page }) => {
-  const BASE_URL = process.env.BASE_URL!;
+  //const BASE_URL = process.env.BASE_URL!;
   const UNAME = process.env.APP_USERNAME!;
   const PWORD = process.env.APP_PASSWORD!;
   const PRODUCT_NAME = "Sauce Labs Backpack";
 
   // Step 1: Login
   const loginPage = new LoginPage(page);
-  await loginPage.navigateToLoginPage(BASE_URL);
+  await loginPage.navigateToLoginPage();
   await loginPage.fillUsername(UNAME);
   await loginPage.fillPassword(PWORD);
   await loginPage.clickLoginButton();

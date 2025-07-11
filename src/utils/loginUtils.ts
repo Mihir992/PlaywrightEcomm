@@ -1,36 +1,28 @@
-import { test, expect, chromium } from "@playwright/test";
-import { performLogin } from "../utils/loginUtils";
-import { InventoryPage } from "../pages/InventoryPage";
-import { CartPage } from "../pages/CartPage";
-import { CheckoutPage } from "../pages/CheckoutPage";
+// loginUtils.ts
+import { Page } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-let page;
-let context;
+export async function performLogin(page: Page) {
+  const baseUrl = process.env.BASE_URL;
+  const username = process.env.APP_USERNAME;
+  const password = process.env.APP_PASSWORD;
 
-test.beforeAll(async () => {
-  const browser = await chromium.launch();
-  context = await browser.newContext({ storageState: 'storageState.json' });
-  page = await context.newPage();
+  if (!baseUrl || !username || !password) {
+    throw new Error("Missing BASE_URL, USERNAME, or PASSWORD in .env file");
+  }
 
-  const inventoryPage = new InventoryPage(page);
-  await inventoryPage.clickProductByName("Sauce Labs Backpack");
-  await inventoryPage.clickOnAddToCartButton();
-  await inventoryPage.clickCartButton();
-});
+  await page.goto(baseUrl);
+  const loginPage = new LoginPage(page);
+  await loginPage.fillUsername(username);
+  await loginPage.fillPassword(password);
+  const inventoryPage = await loginPage.clickLoginButton();
 
-// test.afterAll(async () => {
-//   await context.close(); // Close browser context after tests
-// });
+  const popup = page.locator('text=Change your password >> visible=true');
+  if (await popup.isVisible()) {
+    await page.getByRole('button', { name: 'OK' }).click();
+  }
 
-test("Verify cart item test", async () => {
- const cartPage = new CartPage(page);
-  const actualDetails = await cartPage.fetchCartDetails();
-  console.log("Fetched Cart Details:", actualDetails);
-  expect(actualDetails.name).toBe("Sauce Labs Backpack");
-});
-
-test("Proceed to checkout page", async () => {
-  const cartPage = new CartPage(page);
-  const checkoutPage: CheckoutPage = await cartPage.clickOnCheckoutButton();
-  expect(await page.url()).toContain("checkout-step-one");
-});
+  await page.waitForSelector('.inventory_list');
+}

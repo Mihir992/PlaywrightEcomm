@@ -65,18 +65,8 @@ export class InventoryPage {
     await expect(this.page.locator(this.removeBtn)).toBeVisible();
 }
   
-<<<<<<< HEAD
   async clickCartButton(){
       await this.page.locator(this.cartBtn).click();
       this.page.waitForURL('https://www.saucedemo.com/cart.html');
     }
-=======
-  async clickCartButton():Promise<CartPage>{
-    await Promise.all([
-      this.page.locator(this.cartBtn).click(),
-      this.page.waitForURL('https://www.saucedemo.com/cart.html'),
-    ]);
-     return new CartPage(this.page); // returns the next page object 
-  }
->>>>>>> 97cadf8514680eb362ed45e166f930154e7653fd
 }

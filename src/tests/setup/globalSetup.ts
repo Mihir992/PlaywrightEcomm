@@ -1,6 +1,6 @@
 // global-setup.ts
 import { chromium } from '@playwright/test';
-import { performLogin } from './src/utils/loginUtils';
+import { performLogin } from 'utils/loginUtils';
 
 async function globalSetup() {
   const browser = await chromium.launch();

@@ -3,6 +3,7 @@ import { CartPage } from "./CartPage";
 
 export class InventoryPage {
   readonly page: Page;
+   //readonly inventoryUrl = 'https://www.saucedemo.com/inventory.html';
   readonly productItemContainer = '[data-test="inventory-item"]';
   readonly addToCartBtn = '[data-test="add-to-cart"]';
   readonly removeBtn = '[data-test="remove"]';
@@ -13,11 +14,21 @@ export class InventoryPage {
     this.page = page;
   }
 
+  // 🔹 New method to navigate to the inventory page
+  /*async navigateToPage() {
+    await this.page.goto(this.inventoryUrl);
+    await this.page.waitForSelector(this.productItemContainer, { timeout: 5000 });
+  }*/
+
   // Method to get all products as a list
   async getAllProducts() {
+    //await this.page.pause();
     const products: { name: string; description: string; price: string }[] = [];
+    await this.page.waitForSelector(this.productItemContainer, { timeout: 5000 });
     const productElements = this.page.locator(this.productItemContainer);
     const count = await productElements.count(); //missing await
+    console.log(`Found product container count: ${count}`);
+
     for (let i = 0; i < count; i++) {
       const item = productElements.nth(i); //access one product at a time
       const name = await item.locator('[data-test="inventory-item-name"]').innerText();
@@ -26,7 +37,7 @@ export class InventoryPage {
       products.push({ name, description, price });
       }
       console.log("All Products:", products); //Print in console
-    return products;
+      return products;
   }
 
   async clickProductByName(productName : string)
@@ -48,15 +59,14 @@ export class InventoryPage {
   }
 
   async clickOnAddToCartButton() {
-    await this.page.locator(this.addToCartBtn).click();
-    await this.page.locator(this.removeBtn).waitFor({ state: 'visible' });
-  }
+    const addToCart = this.page.locator('button[data-test^="add-to-cart"]');
+    await expect(addToCart).toBeVisible({ timeout: 5000 });
+    await addToCart.click();
+    await expect(this.page.locator(this.removeBtn)).toBeVisible();
+}
   
-  async clickCartButton():Promise<CartPage>{
-    await Promise.all([
-      this.page.locator(this.cartBtn).click(),
-      this.page.waitForURL('https://www.saucedemo.com/cart.html'),
-    ]);
-     return new CartPage(this.page); // returns the next page object 
-  }
+  async clickCartButton(){
+      await this.page.locator(this.cartBtn).click();
+      this.page.waitForURL('https://www.saucedemo.com/cart.html');
+    }
 }

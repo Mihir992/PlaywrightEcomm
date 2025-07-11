@@ -24,11 +24,8 @@ export class CartPage {
     return { quantity, name, price };
 }
 
-  async clickOnCheckoutButton():Promise<CheckoutPage>{
-    await Promise.all([
-      await this.page.locator(this.checkoutBtn).click(),
-      await this.page.waitForURL('https://www.saucedemo.com/checkout-step-one.html'),
-    ]);
-    return new CheckoutPage(this.page);
+  async clickOnCheckoutButton(){
+      await this.page.locator(this.checkoutBtn).click();
+      await this.page.waitForURL('https://www.saucedemo.com/checkout-step-one.html');
   }
 }

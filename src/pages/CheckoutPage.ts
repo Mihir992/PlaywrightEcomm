@@ -49,5 +49,5 @@ export class CheckoutPage {
 
     // Assertion
     expect(displayedTotal).toBe(calculatedTotal);
-}
+  }
 }

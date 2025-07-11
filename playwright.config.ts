@@ -1,13 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
-//import path from 'path';
 
-// Load environment variables from .env
-//dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config();
 
 export default defineConfig({
+   
   testDir: './src/tests',
-  globalSetup: './src/tests/setup/globalSetup.ts',
+  //globalSetup: './globalSetup.ts',
   workers: 1,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -16,6 +15,9 @@ export default defineConfig({
 
   /* Shared settings for all tests (can be overridden per project) */
   use: {
+    headless: false,
+    //baseURL: process.env.BASE_URL,
+    //storageState: 'storageState.json',
     screenshot: 'on',
     // baseURL: process.env.BASE_URL, // Optional: Uncomment if needed
     // trace: 'on-first-retry',
@@ -27,7 +29,8 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'tests/storage/storageState.json', // ✅ correct placement
+       // baseURL: process.env.BASE_URL, // <- add this
+        //storageState: 'tests/storage/storageState.json', // ✅ correct placement
       },
     },
 

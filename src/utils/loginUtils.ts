@@ -1,27 +1,24 @@
-import { Page, BrowserContext } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
+// utils/login.ts
+import { chromium, BrowserContext } from '@playwright/test';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-export async function performLogin(page: Page, context: BrowserContext) {
-  const baseUrl = process.env.BASE_URL;
-  const username = process.env.APP_USERNAME;
-  const password = process.env.APP_PASSWORD;
+export async function login(): Promise<BrowserContext> {
+  const browser = await chromium.launch({ headless: false, slowMo: 100 });
+  const context = await browser.newContext();
 
-  if (!baseUrl || !username || !password) {
-    throw new Error("Missing BASE_URL, APP_USERNAME, or APP_PASSWORD in .env");
-  }
+  const page = await context.newPage();
+  console.log('Navigating to:', process.env.BASE_URL);
+ 
+  await page.goto(`${process.env.BASE_URL}`);
+  //await page.pause();
+  await page.fill('input[name="user-name"]', process.env.APP_USERNAME || '');
+  await page.fill('input[name="password"]', process.env.APP_PASSWORD || '');
+  await page.locator('input[name="login-button"]').click();
 
-  const loginPage = new LoginPage(page);
-  await loginPage.goto(baseUrl);
-  await loginPage.fillUsername(username);
-  await loginPage.fillPassword(password);
-  await loginPage.clickLoginButton();
+  // Wait for successful login - adjust as needed
+  await page.waitForSelector('.inventory_list', { timeout: 15000 });
 
-  // Ensure login was successful
-  await page.waitForSelector('.inventory_list');
-
-  // Save storage state
-  await page.context().storageState({ path: 'tests/storage/storageState.json' });
+  return context;
 }

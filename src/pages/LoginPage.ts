@@ -23,12 +23,8 @@ export class LoginPage{
       await this.page.locator(this.passwordInputSelector).fill(pwd);
     }
 
-  async clickLoginButton(): Promise<InventoryPage> {
-    await Promise.all([
-      //this.page.waitForNavigation({ waitUntil: 'load' }),
+  async clickLoginButton() {
       this.page.locator(this.loginButton).click()
-    ]);
-    return new InventoryPage(this.page);
   }
 }
 

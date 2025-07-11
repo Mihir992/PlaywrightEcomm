@@ -3,9 +3,13 @@ import { CartPage } from "./CartPage";
 
 export class InventoryPage {
   readonly page: Page;
+<<<<<<< HEAD
    //readonly inventoryUrl = 'https://www.saucedemo.com/inventory.html';
+=======
+   readonly inventoryUrl = 'https://www.saucedemo.com/inventory.html';
+>>>>>>> 97cadf8514680eb362ed45e166f930154e7653fd
   readonly productItemContainer = '[data-test="inventory-item"]';
-  readonly addToCartBtn = '[data-test="add-to-cart"]';
+  //readonly addToCartBtn = '[data-test="add-to-cart"]';
   readonly removeBtn = '[data-test="remove"]';
   readonly cartBtn = '[data-test="shopping-cart-link"]';
   readonly cartBadge = '[data-test="shopping-cart-badge"]';  
@@ -15,6 +19,7 @@ export class InventoryPage {
   }
 
   // 🔹 New method to navigate to the inventory page
+<<<<<<< HEAD
   /*async navigateToPage() {
     await this.page.goto(this.inventoryUrl);
     await this.page.waitForSelector(this.productItemContainer, { timeout: 5000 });
@@ -23,6 +28,16 @@ export class InventoryPage {
   // Method to get all products as a list
   async getAllProducts() {
     //await this.page.pause();
+=======
+  async navigateToPage() {
+    await this.page.goto(this.inventoryUrl);
+    await this.page.waitForSelector(this.productItemContainer, { timeout: 5000 });
+  }
+
+  // Method to get all products as a list
+  async getAllProducts() {
+    await this.page.pause();
+>>>>>>> 97cadf8514680eb362ed45e166f930154e7653fd
     const products: { name: string; description: string; price: string }[] = [];
     await this.page.waitForSelector(this.productItemContainer, { timeout: 5000 });
     const productElements = this.page.locator(this.productItemContainer);
@@ -65,8 +80,18 @@ export class InventoryPage {
     await expect(this.page.locator(this.removeBtn)).toBeVisible();
 }
   
+<<<<<<< HEAD
   async clickCartButton(){
       await this.page.locator(this.cartBtn).click();
       this.page.waitForURL('https://www.saucedemo.com/cart.html');
     }
+=======
+  async clickCartButton():Promise<CartPage>{
+    await Promise.all([
+      this.page.locator(this.cartBtn).click(),
+      this.page.waitForURL('https://www.saucedemo.com/cart.html'),
+    ]);
+     return new CartPage(this.page); // returns the next page object 
+  }
+>>>>>>> 97cadf8514680eb362ed45e166f930154e7653fd
 }

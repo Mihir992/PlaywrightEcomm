@@ -11,20 +11,31 @@ export class LoginPage{
          this.page = page;
     }
 
-    async goto(baseURL: string) {
-      await this.page.goto(baseURL); // Remove the /login
+    async navigateToLoginPage() {
+      const baseUrl = process.env.BASE_URL;
+      if (!baseUrl) throw new Error("BASE_URL not set in .env");
+      await this.page.goto(baseUrl);
     }
 
-    async fillUsername(uname: string) {
-      await this.page.locator(this.usernameInputSelector).fill(uname);
-    }
+  async fillUsername(uname: string) {
+    await this.page.locator(this.usernameInputSelector).fill(uname);
+  }
 
-    async fillPassword(pwd: string) {
-      await this.page.locator(this.passwordInputSelector).fill(pwd);
-    }
+  async fillPassword(pwd: string) {
+    await this.page.locator(this.passwordInputSelector).fill(pwd);
+  }
 
+<<<<<<< HEAD
   async clickLoginButton() {
       this.page.locator(this.loginButton).click()
+=======
+  async clickLoginButton():Promise<InventoryPage> {
+    await Promise.all([
+      this.page.locator(this.loginButton).click(),
+      //const inventoryPage = new InventoryPage(this.page);
+    ]);
+    return new InventoryPage(this.page); // returns the next page object
+>>>>>>> 97cadf8514680eb362ed45e166f930154e7653fd
   }
 }
 

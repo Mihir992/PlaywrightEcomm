@@ -4,9 +4,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 export default defineConfig({
-   
   testDir: './src/tests',
-  //globalSetup: './globalSetup.ts',
   workers: 1,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -15,9 +13,7 @@ export default defineConfig({
 
   /* Shared settings for all tests (can be overridden per project) */
   use: {
-    headless: false,
-    //baseURL: process.env.BASE_URL,
-    //storageState: 'storageState.json',
+    headless: true,
     screenshot: 'on',
     // baseURL: process.env.BASE_URL, // Optional: Uncomment if needed
     // trace: 'on-first-retry',

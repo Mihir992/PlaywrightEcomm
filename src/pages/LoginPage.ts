@@ -25,17 +25,8 @@ export class LoginPage{
     await this.page.locator(this.passwordInputSelector).fill(pwd);
   }
 
-<<<<<<< HEAD
   async clickLoginButton() {
       this.page.locator(this.loginButton).click()
-=======
-  async clickLoginButton():Promise<InventoryPage> {
-    await Promise.all([
-      this.page.locator(this.loginButton).click(),
-      //const inventoryPage = new InventoryPage(this.page);
-    ]);
-    return new InventoryPage(this.page); // returns the next page object
->>>>>>> 97cadf8514680eb362ed45e166f930154e7653fd
   }
 }
 

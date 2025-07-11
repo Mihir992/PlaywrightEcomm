@@ -16,7 +16,7 @@ test('E2E Test: Login → Add to Cart → Checkout → Verify Total', async ({ p
 
   // Step 1: Login
   const loginPage = new LoginPage(page);
-  await loginPage.goto(BASE_URL);
+  await loginPage.navigateToLoginPage(BASE_URL);
   await loginPage.fillUsername(UNAME);
   await loginPage.fillPassword(PWORD);
   await loginPage.clickLoginButton();

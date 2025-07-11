@@ -1,27 +1,36 @@
-import { Page, BrowserContext } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage";
-import * as dotenv from 'dotenv';
+import { test, expect, chromium } from "@playwright/test";
+import { performLogin } from "../utils/loginUtils";
+import { InventoryPage } from "../pages/InventoryPage";
+import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
 
-dotenv.config();
+let page;
+let context;
 
-export async function performLogin(page: Page, context: BrowserContext) {
-  const baseUrl = process.env.BASE_URL;
-  const username = process.env.APP_USERNAME;
-  const password = process.env.APP_PASSWORD;
+test.beforeAll(async () => {
+  const browser = await chromium.launch();
+  context = await browser.newContext({ storageState: 'storageState.json' });
+  page = await context.newPage();
 
-  if (!baseUrl || !username || !password) {
-    throw new Error("Missing BASE_URL, APP_USERNAME, or APP_PASSWORD in .env");
-  }
+  const inventoryPage = new InventoryPage(page);
+  await inventoryPage.clickProductByName("Sauce Labs Backpack");
+  await inventoryPage.clickOnAddToCartButton();
+  await inventoryPage.clickCartButton();
+});
 
-  const loginPage = new LoginPage(page);
-  await loginPage.goto(baseUrl);
-  await loginPage.fillUsername(username);
-  await loginPage.fillPassword(password);
-  await loginPage.clickLoginButton();
+// test.afterAll(async () => {
+//   await context.close(); // Close browser context after tests
+// });
 
-  // Ensure login was successful
-  await page.waitForSelector('.inventory_list');
+test("Verify cart item test", async () => {
+ const cartPage = new CartPage(page);
+  const actualDetails = await cartPage.fetchCartDetails();
+  console.log("Fetched Cart Details:", actualDetails);
+  expect(actualDetails.name).toBe("Sauce Labs Backpack");
+});
 
-  // Save storage state
-  await page.context().storageState({ path: 'tests/storage/storageState.json' });
-}
+test("Proceed to checkout page", async () => {
+  const cartPage = new CartPage(page);
+  const checkoutPage: CheckoutPage = await cartPage.clickOnCheckoutButton();
+  expect(await page.url()).toContain("checkout-step-one");
+});

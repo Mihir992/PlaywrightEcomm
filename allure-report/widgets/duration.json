@@ -1,0 +1,1 @@
+[{"uid":"bf13002620d753","name":"E2E Test: Login → Add to Cart → Checkout → Verify Total","time":{"start":1752405542103,"stop":1752405547041,"duration":4938},"status":"passed","severity":"normal"}]

@@ -9,8 +9,11 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  reporter: 'html',
-
+  //reporter: 'html',
+  reporter: [
+    ['list'],
+    ['allure-playwright'],
+  ],
   /* Shared settings for all tests (can be overridden per project) */
   use: {
     headless: true,
